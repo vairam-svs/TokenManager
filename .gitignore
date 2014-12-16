@@ -1,0 +1,5 @@
+*.v12.suo
+*.csproj.user
+/source/packages
+/source/TokenManagerJS/bin
+/source/TokenManagerJS/obj
