@@ -43,15 +43,20 @@ function DefaultHttpRequest() {
                 }
 
                 xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        var response = xhr.response;
-                        if (typeof response === "string") {
-                            response = JSON.parse(response);
+                    try {
+                        if (xhr.status === 200) {
+                            var response = xhr.response;
+                            if (typeof response === "string") {
+                                response = JSON.parse(response);
+                            }
+                            resolve(response);
                         }
-                        resolve(response);
+                        else {
+                            reject(Error(xhr.statusText + "(" + xhr.status + ")"));
+                        }
                     }
-                    else {
-                        reject(Error(xhr.statusText + "(" + xhr.status + ")"));
+                    catch (err) {
+                        reject(err);
                     }
                 };
 

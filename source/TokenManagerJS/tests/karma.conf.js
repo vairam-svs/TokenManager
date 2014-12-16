@@ -1,11 +1,10 @@
 module.exports = function (config) {
     config.set({
         basePath: '../',
-        frameworks: ['jasmine', 'karma-http-server'],
+        frameworks: ['jasmine'],
         plugins:[
             'karma-jasmine',
-            'karma-chrome-launcher',
-            require('./libs/httpServer/index.js')
+            'karma-chrome-launcher'
         ],
         files: [
             'oidc/defaultHttpRequest.js',
@@ -23,22 +22,6 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ['Chrome'],
-        singleRun: false,
-
-        karmaHttpServer: {
-            port: 7513,
-            configure: function (app, log) {
-                console.log('fooo');
-                log.info('Visiting');
-
-                app.get('/invalid-json', function (req, res) {
-                    res.send('');
-                });
-
-                app.get('/valid-json', function (req, res) {
-                    res.send(JSON.stringify({foo: 'bar'}));
-                });
-            }
-        }
+        singleRun: false
     });
 };
