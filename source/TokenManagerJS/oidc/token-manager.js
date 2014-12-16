@@ -28,7 +28,7 @@ var _httpRequest = new DefaultHttpRequest();
  */
 var _promiseFactory = new DefaultPromiseFactory();
 
-function Token(id_token, id_token_jwt, access_token, expires_at) {
+function Token(id_token, id_token_jwt, access_token, expires_at, scope) {
     this.id_token = id_token;
     this.id_token_jwt = id_token_jwt;
     this.access_token = access_token;
@@ -55,6 +55,8 @@ function Token(id_token, id_token_jwt, access_token, expires_at) {
             return this.expires_at - now;
         }
     });
+
+    this.scopes = (scope || "").split(" ");
 }
 
 Token.fromResponse = function (response) {
@@ -62,14 +64,14 @@ Token.fromResponse = function (response) {
         var now = parseInt(Date.now() / 1000);
         var expires_at = now + parseInt(response.expires_in);
     }
-    return new Token(response.id_token, response.id_token_jwt, response.access_token, expires_at);
+    return new Token(response.id_token, response.id_token_jwt, response.access_token, expires_at, response.scope);
 }
 
 Token.fromJSON = function (json) {
     if (json) {
         try {
             var obj = JSON.parse(json);
-            return new Token(obj.id_token, obj.id_token_jwt, obj.access_token, obj.expires_at);
+            return new Token(obj.id_token, obj.id_token_jwt, obj.access_token, obj.expires_at, obj.scope);
         }
         catch (e) {
         }
@@ -82,7 +84,8 @@ Token.prototype.toJSON = function () {
         id_token: this.id_token,
         id_token_jwt: this.id_token_jwt,
         access_token: this.access_token,
-        expires_at: this.expires_at
+        expires_at: this.expires_at,
+        scope: this.scopes.join(" ")
     });
 }
 
@@ -314,6 +317,14 @@ function TokenManager(settings) {
                 return this._token.expires_at;
             }
             return 0;
+        }
+    });
+    Object.defineProperty(this, "scopes", {
+        get: function () {
+            if (this._token) {
+                return [].concat(this._token.scopes);
+            }
+            return [];
         }
     });
 

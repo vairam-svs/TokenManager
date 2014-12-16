@@ -48,3 +48,5 @@ function DefaultPromiseFactory() {
         return new DefaultPromise(new Promise(callback));
     };
 }
+
+_promiseFactory = new DefaultPromiseFactory();

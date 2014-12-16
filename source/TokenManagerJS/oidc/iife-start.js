@@ -1,5 +1,5 @@
 ﻿(function () {
 
     // globals
-    var _promiseFactory; // TODO set default value
+    var _promiseFactory;
     var _httpRequest;

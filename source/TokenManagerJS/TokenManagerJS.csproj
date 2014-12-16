@@ -115,6 +115,10 @@
     <Content Include="oidc\defaultHttpRequest.min.js">
       <DependentUpon>defaultHttpRequest.js</DependentUpon>
     </Content>
+    <Content Include="oidc\defaultPromiseFactory.js" />
+    <Content Include="oidc\defaultPromiseFactory.min.js">
+      <DependentUpon>defaultPromiseFactory.js</DependentUpon>
+    </Content>
     <Content Include="oidc\es6-promise-2.0.0.js" />
     <Content Include="oidc\es6-promise-2.0.0.min.js">
       <DependentUpon>es6-promise-2.0.0.js</DependentUpon>
@@ -175,6 +179,9 @@
     </Content>
     <Content Include="oidc\oidc.min.js.map">
       <DependentUpon>oidc.min.js</DependentUpon>
+    </Content>
+    <Content Include="oidc\defaultPromiseFactory.min.js.map">
+      <DependentUpon>defaultPromiseFactory.min.js</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
