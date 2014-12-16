@@ -67,5 +67,6 @@ function DefaultHttpRequest() {
             return _promiseFactory.reject(err);
         }
     };
-
 }
+
+_httpRequest = new DefaultHttpRequest();

@@ -35,7 +35,7 @@ function rand() {
 }
 
 function error(message) {
-    return Promise.reject(Error(message));
+    return _promiseFactory.reject(Error(message));
 }
 
 function parseOidcResult(queryString) {
@@ -166,7 +166,7 @@ OidcClient.prototype.loadAuthorizationEndpoint = function () {
     log("OidcClient.loadAuthorizationEndpoint");
 
     if (this._settings.authorization_endpoint) {
-        return Promise.resolve(this._settings.authorization_endpoint);
+        return _promiseFactory.resolve(this._settings.authorization_endpoint);
     }
 
     if (!this._settings.authority) {
@@ -240,7 +240,7 @@ OidcClient.prototype.loadMetadataAsync = function () {
     var settings = this._settings;
 
     if (settings.metadata) {
-        return Promise.resolve(settings.metadata);
+        return _promiseFactory.resolve(settings.metadata);
     }
 
     if (!settings.authority) {
@@ -275,7 +275,7 @@ OidcClient.prototype.loadX509SigningKeyAsync = function () {
             return error("RSA keys empty");
         }
 
-        return Promise.resolve(key.x5c[0]);
+        return _promiseFactory.resolve(key.x5c[0]);
     }
 
     if (settings.jwks) {
@@ -370,7 +370,7 @@ OidcClient.prototype.validateAccessTokenAsync = function (id_token, access_token
         return error("at_hash failed to validate");
     }
 
-    return Promise.resolve();
+    return _promiseFactory.resolve();
 };
 
 OidcClient.prototype.loadUserProfile = function (access_token, id_token) {
@@ -379,7 +379,7 @@ OidcClient.prototype.loadUserProfile = function (access_token, id_token) {
     return this.loadMetadataAsync().then(function (metadata) {
 
         if (!metadata.userinfo_endpoint) {
-            return Promise.reject(Error("Metadata does not contain userinfo_endpoint"));
+            return _promiseFactory.reject(Error("Metadata does not contain userinfo_endpoint"));
         }
 
         return getJson(metadata.userinfo_endpoint, access_token).then(function (response) {
@@ -465,7 +465,7 @@ OidcClient.prototype.readResponseAsync = function (queryString) {
         }
     }
 
-    var promise = Promise.resolve();
+    var promise = _promiseFactory.resolve();
     if (data.oidc && data.oauth) {
         promise = client.validateIdTokenAndAccessTokenAsync(result.id_token, data.nonce, result.access_token);
     }

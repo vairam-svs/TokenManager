@@ -1,4 +1,4 @@
-﻿/// <reference path="es6-promise-2.0.0.js" />
+/// <reference path="es6-promise-2.0.0.js" />
 /// <reference path="oidcclient.js" />
 /*
 * Copyright 2014 Dominick Baier, Brock Allen
@@ -83,10 +83,10 @@ FrameLoader.prototype.loadAsync = function (url) {
     url = url || this.url;
 
     if (!url) {
-        return Promise.reject("No url provided");
+        return _promiseFactory.reject("No url provided");
     }
 
-    return new Promise(function (resolve, reject) {
+    return _promiseFactory.create(function (resolve, reject) {
         var frameHtml = '<iframe style="display:none"></iframe>';
         var frame = $(frameHtml).appendTo("body");
 
@@ -403,7 +403,7 @@ TokenManager.prototype.renewTokenSilentAsync = function () {
     var mgr = this;
 
     if (!mgr._settings.silent_redirect_uri) {
-        return Promise.reject("silent_redirect_uri not configured");
+        return _promiseFactory.reject("silent_redirect_uri not configured");
     }
 
     var settings = copy(mgr._settings);
