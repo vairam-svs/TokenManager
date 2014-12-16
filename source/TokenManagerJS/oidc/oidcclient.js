@@ -1,4 +1,5 @@
-﻿/*
+﻿/// <reference path="es6-promise-2.0.0.js" />
+/*
  * Copyright 2014 Dominick Baier, Brock Allen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -356,7 +357,7 @@ OidcClient.prototype.validateIdTokenAsync = function (jwt, nonce, access_token) 
                         return id_token;
                     });
                 }
-                else{
+                else {
                     // no access token, so we have all our claims
                     return id_token;
                 }

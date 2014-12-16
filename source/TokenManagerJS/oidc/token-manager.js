@@ -1,5 +1,5 @@
 ﻿/// <reference path="es6-promise-2.0.0.js" />
-/// <reference path="base64.js" />
+/// <reference path="oidcclient.js" />
 /*
 * Copyright 2014 Dominick Baier, Brock Allen
 *
@@ -71,7 +71,7 @@ Token.prototype.toJSON = function () {
         id_token: this.id_token,
         id_token_jwt: this.id_token_jwt,
         access_token: this.access_token,
-        expires_at : this.expires_at
+        expires_at: this.expires_at
     });
 }
 
@@ -324,6 +324,14 @@ function TokenManager(settings) {
     }, 0);
 }
 
+TokenManager.setPromiseFactory = function (promiseFactory) {
+    _promiseFactory = promiseFactory;
+};
+
+TokenManager.setHttpRequest = function (httpRequest) {
+    _httpRequest = httpRequest;
+};
+
 TokenManager.prototype.saveToken = function (token) {
     if (token && !(token instanceof Token)) {
         token = Token.fromResponse(token);
@@ -405,7 +413,7 @@ TokenManager.prototype.renewTokenSilentAsync = function () {
     var oidc = new OidcClient(settings);
     return oidc.createTokenRequestAsync().then(function (request) {
         var frame = new FrameLoader(request.url);
-        return frame.loadAsync().then(function(hash) {
+        return frame.loadAsync().then(function (hash) {
             return oidc.readResponseAsync(hash).then(function (token) {
                 mgr.saveToken(token);
             });
