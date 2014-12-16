@@ -1,11 +1,10 @@
-﻿using Owin;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens;
-using System.Linq;
 using System.Web.Http;
+using Owin;
 using Thinktecture.IdentityServer.v3.AccessTokenValidation;
 
-namespace JsImplicitOAuthLibraryDemo
+namespace TokenManagerJS
 {
     public class Startup
     {
@@ -16,7 +15,7 @@ namespace JsImplicitOAuthLibraryDemo
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                 {
                     Authority = "https://localhost:44333/core"
-                });          
+                });
 
             var config = new HttpConfiguration();
             config.SuppressDefaultHostAuthentication();

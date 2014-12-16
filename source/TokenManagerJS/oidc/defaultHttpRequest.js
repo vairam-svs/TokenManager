@@ -66,5 +66,6 @@ function DefaultHttpRequest() {
             }
         });
     };
-
 }
+
+_httpRequest = new DefaultHttpRequest();
