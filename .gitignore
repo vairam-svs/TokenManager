@@ -1,5 +1,7 @@
 *.v12.suo
 *.csproj.user
+.idea
 /source/packages
 /source/TokenManagerJS/bin
 /source/TokenManagerJS/obj
+node_modules/

@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-
 function log() {
     //var param = [].join.call(arguments);
     //console.log(param);
@@ -68,37 +67,21 @@ function parseOidcResult(queryString) {
     }
 }
 
+/**
+ * @param {string} url
+ * @param {string|undefined} token
+ * @returns {Promise}
+ */
 function getJson(url, token) {
     log("getJson", url);
 
-    return new Promise(function (resolve, reject) {
+    var config = {};
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", url);
-        xhr.responseType = "json";
-        if (token) {
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
-        }
+    if (token) {
+        config.headers = {"Authorization": "Bearer " + token};
+    }
 
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var response = xhr.response;
-                if (typeof response === "string") {
-                    response = JSON.parse(response);
-                }
-                resolve(response);
-            }
-            else {
-                reject(Error(xhr.statusText + "(" + xhr.status + ")"));
-            }
-        };
-
-        xhr.onerror = function () {
-            reject(Error("Network error"));
-        }
-
-        xhr.send();
-    });
+    return _httpRequest.getJSON(url, config);
 }
 
 var requestDataKey = "OidcClient.requestDataKey";
@@ -500,3 +483,7 @@ OidcClient.prototype.readResponseAsync = function (queryString) {
     });
 }
 
+/**
+ * @name _httpRequest
+ * @type DefaultHttpRequest
+ */

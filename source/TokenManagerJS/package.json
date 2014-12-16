@@ -1,0 +1,7 @@
+{
+  "name": "tokenmanager",
+  "version": "0.0.1",
+  "devDependencies": {
+    "express": "^4.10.6"
+  }
+}
