@@ -16,6 +16,17 @@
 * limitations under the License.
 */
 
+/**
+ * @type {DefaultHttpRequest}
+ * @private
+ */
+var _httpRequest = new DefaultHttpRequest();
+
+/**
+ * @type {DefaultPromiseFactory}
+ * @private
+ */
+var _promiseFactory = new DefaultPromiseFactory();
 
 function Token(id_token, id_token_jwt, access_token, expires_at) {
     this.id_token = id_token;
@@ -161,6 +172,7 @@ function configureTokenExpiring(mgr) {
     }
 
     var handle = null;
+
     function cancel() {
         if (handle) {
             window.clearTimeout(handle);
@@ -185,6 +197,7 @@ function configureTokenExpiring(mgr) {
             }
         }
     }
+
     configure();
 
     mgr.addOnTokenObtained(configure);
@@ -217,6 +230,7 @@ function configureTokenExpired(mgr) {
     }
 
     var handle = null;
+
     function cancel() {
         if (handle) {
             window.clearTimeout(handle);
@@ -235,6 +249,7 @@ function configureTokenExpired(mgr) {
             setup(mgr.expires_in + 1);
         }
     }
+
     configure();
 
     mgr.addOnTokenObtained(configure);
@@ -324,11 +339,21 @@ function TokenManager(settings) {
     }, 0);
 }
 
+/**
+ * @param {{ create:function(successCallback:function(), errorCallback:function()):Promise, resolve:function(value:*):Promise, reject:function():Promise}} promiseFactory
+ */
 TokenManager.setPromiseFactory = function (promiseFactory) {
     _promiseFactory = promiseFactory;
 };
 
+/**
+ * @param {{getJSON:function(url:string, config:{ headers: object.<string, string> })}} httpRequest
+ */
 TokenManager.setHttpRequest = function (httpRequest) {
+    if ((typeof httpRequest !== 'object') || (typeof httpRequest.getJSON !== 'function')) {
+        throw Error('The provided value is not a valid http request.');
+    }
+
     _httpRequest = httpRequest;
 };
 
@@ -427,5 +452,6 @@ TokenManager.prototype.processTokenCallbackSilent = function () {
         if (hash) {
             window.top.postMessage(hash, location.protocol + "//" + location.host);
         }
-    };
+    }
+    ;
 }

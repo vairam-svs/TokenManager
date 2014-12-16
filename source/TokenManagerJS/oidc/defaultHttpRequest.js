@@ -5,7 +5,7 @@ function DefaultHttpRequest() {
 
     /**
      * @name _promiseFactory
-     * @type object
+     * @type DefaultPromiseFactory
      */
 
     /**
@@ -29,43 +29,42 @@ function DefaultHttpRequest() {
      * @returns {Promise}
      */
     this.getJSON = function (url, config) {
-        var defer = _promiseFactory.create();
+        return _promiseFactory.create(function (resolve, reject) {
 
-        try {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url);
-            xhr.responseType = "json";
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.responseType = "json";
 
-            if (config) {
-                if (config.headers) {
-                    setHeaders(xhr, config.headers);
-                }
-            }
-
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    var response = xhr.response;
-                    if (typeof response === "string") {
-                        response = JSON.parse(response);
+                if (config) {
+                    if (config.headers) {
+                        setHeaders(xhr, config.headers);
                     }
-                    defer.resolve(response);
                 }
-                else {
-                    defer.reject(Error(xhr.statusText + "(" + xhr.status + ")"));
-                }
-            };
 
-            xhr.onerror = function () {
-                defer.reject(Error("Network error"));
-            };
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var response = xhr.response;
+                        if (typeof response === "string") {
+                            response = JSON.parse(response);
+                        }
+                        resolve(response);
+                    }
+                    else {
+                        reject(Error(xhr.statusText + "(" + xhr.status + ")"));
+                    }
+                };
 
-            xhr.send();
+                xhr.onerror = function () {
+                    reject(Error("Network error"));
+                };
 
-            return defer.promise;
-        }
-        catch (err) {
-            return _promiseFactory.reject(err);
-        }
+                xhr.send();
+            }
+            catch (err) {
+                return reject(err);
+            }
+        });
     };
 
 }

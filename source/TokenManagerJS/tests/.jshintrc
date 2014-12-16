@@ -17,5 +17,5 @@
    "browser": true,
    "devel": true,
    "jquery": true,
-   "globals": ["describe", "it", "expect", "beforeEach", "fail"]
+   "globals": ["module", "require", "describe", "it", "expect", "beforeEach", "afterEach", "jasmine"]
 }

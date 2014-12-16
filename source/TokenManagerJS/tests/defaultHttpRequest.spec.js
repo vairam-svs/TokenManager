@@ -14,9 +14,9 @@ describe("defaultHttpRequest", function () {
     });
 
     it('Returns a rejected promise when the url cannot be reached.', function (done) {
-        http.getJSON('http://fake.url')
+        http.getJSON('http://localhost:7513/fake.url')
             .then(function () {
-                fail('Unreachable url must not resolve');
+                jasmine.getEnv().fail('Unreachable url must not resolve');
             }, function (err) {
                 expect(err).not.toBe(undefined);
             })
@@ -24,9 +24,9 @@ describe("defaultHttpRequest", function () {
     });
 
     it('Returns a rejected promise when the response is not a valid json.', function (done) {
-        http.getJSON('http://invalid-json.url')
+        http.getJSON('http://localhost:7513/invalid-json')
             .then(function () {
-                fail('invalid responses must not resolve');
+                jasmine.getEnv().fail('invalid responses must not resolve');
             }, function (err) {
                 expect(err).not.toBe(undefined);
             })
@@ -34,15 +34,13 @@ describe("defaultHttpRequest", function () {
     });
 
     it('Returns a resolved promise when the response delivers valid json.', function (done) {
-        http.getJSON('http://invalid-json.url')
+        http.getJSON('http://localhost:7513/valid-json')
             .then(function (result) {
                 expect(result).toEqual({foo: 'bar'});
             }, function (err) {
-                fail('valid response must not fail. Error: ' + err);
+               jasmine.getEnv().fail('valid response must not fail. Error: ' + err);
             })
             .then(done, done);
     });
-
-
 });
 
