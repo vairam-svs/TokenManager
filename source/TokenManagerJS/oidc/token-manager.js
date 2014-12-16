@@ -167,6 +167,12 @@ function callTokenObtained(mgr) {
     });
 }
 
+function callSilentTokenRenewFailed(mgr) {
+    mgr._callbacks.silentTokenRenewFailedCallbacks.forEach(function(cb) {
+        cb();
+    });
+}
+
 function configureTokenExpiring(mgr) {
 
     function callback() {
@@ -213,6 +219,7 @@ function configureAutoRenewToken(mgr) {
 
         mgr.addOnTokenExpiring(function () {
             mgr.renewTokenSilentAsync().catch(function (e) {
+                callSilentTokenRenewFailed(mgr);
                 console.error(e.message || e);
             });
         });
@@ -270,7 +277,8 @@ function TokenManager(settings) {
         tokenRemovedCallbacks: [],
         tokenExpiringCallbacks: [],
         tokenExpiredCallbacks: [],
-        tokenObtainedCallbacks: []
+        tokenObtainedCallbacks: [],
+        silentTokenRenewFailedCallbacks: []
     };
 
     Object.defineProperty(this, "id_token", {
@@ -403,6 +411,10 @@ TokenManager.prototype.addOnTokenExpiring = function (cb) {
 
 TokenManager.prototype.addOnTokenExpired = function (cb) {
     this._callbacks.tokenExpiredCallbacks.push(cb);
+}
+
+TokenManager.prototype.addOnSilentTokenRenewFailed = function(cb) {
+    this._callbacks.silentTokenRenewFailedCallbacks.push(cb);
 }
 
 TokenManager.prototype.removeToken = function () {
