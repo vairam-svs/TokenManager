@@ -1,43 +1,28 @@
-Thinktecture IdentityServer v3 Samples
-======================================
+Thinktecture IdentityServer v3 TokenManagerJS
+=============================================
 
-Samples for Thinktecture IdentityServer v3
+ JavaScript library for Thinktecture IdentityServer v3
+ (based on OAuthJS sample [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/commit/45d44a3e65e462271acfcfab58b8e713768d5d59))
 
-#### MVC Authentication walk-through [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/MVC%20Authentication)
-Step by step tutorial on how to use identity server to provide authentication services to an MVC application and a Web API. See [here](https://github.com/thinktecture/Thinktecture.IdentityServer.v3/wiki/Getting-started) for instructions.
+## What changed since the last commit? ##
 
-#### Clients [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/Clients)
-Sample clients and API for: client credentials, resource owner flow, code flow, form post, native and JavaScript implicit flow, WS-Federation and OpenID Connect Katana middleware.
+### Added the possiblity to change the implementation of XMLHttpRequest and the Promise polyfill ###
 
-#### Self-Host (minimal) [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/SelfHost%20(Minimal))
-Bare bones IdentityServer v3 host with all in-memory repositories.
+To get the library ready for using in AngularJS (which provides $http and $q), we needed a way to wrap those
+calls to then use the Angular services instead.
 
-#### Self-Host with WS-Federation [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/SelfHost%20(InMem%20with%20WS-Fed))
-Bare bones IdentityServer v3 host with all in-memory repositories and the WS-Federation plugin.
+### Included the scope information in TokenManager ###
 
-#### EntityFramework [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/EntityFramework)
-Sample which illustrates how to use the Thinktecture.IdentityServer.v3.EntityFramework plugin which stores all of IdentityServer's configuration in an EF-capable database.
+As requested in issue [#38](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/issues/38)
+the scope information should be available on the TokenManager. This is now implemented as an array property 'scope'.
 
-#### MembershipReboot [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/MembershipReboot)
-Sample which illustrates how to use the Thinktecture.IdentityServer.v3.MembershipReboot plugin for identity management using MembershipReboot.
+### Prefix the storage key in TokenManager ###
 
-#### AspNetIdentity [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/AspNetIdentity)
-Sample which illustrates how to use the Thinktecture.IdentityServer.v3.AspNetIdentity plugin for identity management using ASP.NET Identity.
+A new property 'persistKey' is available on the settings which could be provided during instantiation of
+TokenManager. This defines the key used to read and write to the persistance store (see issue [#37](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/issues/37))
 
-#### CustomUserService [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/CustomUserService)
-Sample to illustrate how to customize the login workflow by implementing a custom user service.
+### Callback when a silent token renew fails ###
 
-#### EmbeddedAssetsViewService [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/EmbeddedAssetsViewService)
-Sample to illustrate how to add custom CSS and/or JavaScript to the default web pages IdentityServer displays to users.
-
-#### CustomViewService [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/CustomViewService)
-Sample to illustrate how to completely replace the views shown to the user for login, logout, logged out, consent and errors.
-
-#### DependencyInjection [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/DependencyInjection)
-Sample to illustrate how to register custom services with IdentityServer and how to accept as constructor parameters other IdentityServer dependencies and custom dependencies.
-
-#### Custom Grant Types [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/Custom%20Grants)
-Sample to illustrate how add support for non-standard grant types at the token endpoint.
-
-#### Custom Grant Types (more customization) [link](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/tree/master/source/Custom%20Grants%20(more%20customization))
-Sample to illustrate how add support for non-standard grant types at the token endpoint. This sample also uses a custom user service and claims provider
+In issue [#39](https://github.com/thinktecture/Thinktecture.IdentityServer.v3.Samples/issues/39) was a callback requested
+which will be executed, when a silen token renew fails. This is now available on every instance of TokenManager
+as 'addOnSilentTokenRenewFailed'.
