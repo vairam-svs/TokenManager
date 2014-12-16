@@ -133,7 +133,7 @@ FrameLoader.prototype.loadAsync = function (url) {
 
 function loadToken(mgr) {
     if (mgr._settings.persist) {
-        var tokenJson = mgr._settings.store.getItem(storageKey);
+        var tokenJson = mgr._settings.store.getItem(mgr._settings.persistKey);
         if (tokenJson) {
             var token = Token.fromJSON(tokenJson);
             if (!token.expired) {
@@ -259,13 +259,12 @@ function configureTokenExpired(mgr) {
     mgr.addOnTokenRemoved(cancel);
 }
 
-var storageKey = "TokenManager.token";
-
 function TokenManager(settings) {
     this._settings = settings || {};
 
     this._settings.persist = this._settings.persist || true;
     this._settings.store = this._settings.store || window.localStorage;
+    this._settings.persistKey = this._settings.persistKey || "TokenManager.token";
 
     this._callbacks = {
         tokenRemovedCallbacks: [],
@@ -331,7 +330,7 @@ function TokenManager(settings) {
     var mgr = this;
     loadToken(mgr);
     window.addEventListener("storage", function (e) {
-        if (e.key === storageKey) {
+        if (e.key === mgr._settings.persistKey) {
             loadToken(mgr);
             if (mgr._token) {
                 callTokenObtained(mgr);
@@ -376,10 +375,10 @@ TokenManager.prototype.saveToken = function (token) {
     this._token = token;
 
     if (this._settings.persist && !this.expired) {
-        this._settings.store.setItem(storageKey, token.toJSON());
+        this._settings.store.setItem(this._settings.persistKey, token.toJSON());
     }
     else {
-        this._settings.store.removeItem(storageKey);
+        this._settings.store.removeItem(this._settings.persistKey);
     }
 
     if (token) {
